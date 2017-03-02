@@ -26,6 +26,7 @@ public class AnalizadorAccesosAServidor
      */
     public void analizarArchivoDeLog(String archivoLogALeer)
     {
+        listaDeAccesos.clear();
         try {
             File archivo = new File(archivoLogALeer);
             Scanner sc = new Scanner(archivo);
@@ -54,28 +55,28 @@ public class AnalizadorAccesosAServidor
     {
         int horaActual = 0;
         int contActual = 0;
-        int horaMasAccesos = 0;
+        int horaMasAccesos = -1;
         int contMasAccesos = 0;
-        
-        //int[] horasAcceso = new int[listaDeAccesos.size()];
-        for (int i = 0; i < 24; i++){
-            horaActual = i;
-            for (Acceso acceso : listaDeAccesos){
-                if (acceso.getHoraAcceso() == horaActual){
-                    contActual++;
-                }
-            }
-            
-            if (contActual > contMasAccesos){
-                contMasAccesos = contActual;
-                horaMasAccesos = horaActual;
-            }
-            
-            contActual = 0;
-        }
-        
 
-        if (horaMasAccesos == 0) {
+        if (listaDeAccesos.size() != 0) {
+            for (int i = 0; i < 24; i++){
+                horaActual = i;
+                for (Acceso acceso : listaDeAccesos){
+                    if (acceso.getHoraAcceso() == horaActual){
+                        contActual++;
+                    }
+                }
+
+                if (contActual >= contMasAccesos){
+                    contMasAccesos = contActual;
+                    horaMasAccesos = horaActual;
+                }
+
+                contActual = 0;
+            }
+        }
+
+        if (horaMasAccesos == -1) {
             System.out.println("No tengo datos.");
         }
         else {
